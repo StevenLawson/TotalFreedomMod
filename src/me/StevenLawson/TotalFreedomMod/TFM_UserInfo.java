@@ -11,11 +11,13 @@ import org.bukkit.entity.Arrow;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
+import org.bukkit.plugin.Plugin;
 
 public class TFM_UserInfo
 {
     private Player player;
     private boolean user_frozen = false;
+    private boolean is_muted = false;
     private int msg_count = 0;
     private int block_destroy_total = 0;
     private int block_place_total = 0;
@@ -52,6 +54,16 @@ public class TFM_UserInfo
             TFM_UserInfo.userinfo.put(p, playerdata);
         }
         return playerdata;
+    }
+    
+    public boolean isMuted()
+    {
+    	return this.is_muted;
+    }
+    
+    public void setMuted(boolean muted)
+    {
+    	this.is_muted = muted;
     }
     
     public boolean isOrbiting()
@@ -271,7 +283,7 @@ public class TFM_UserInfo
         }
     }
     
-    public void startArrowShooter(TotalFreedomMod plugin)
+    public void startArrowShooter(Plugin plugin)
     {
         this.stopArrowShooter();
         this.mp44_schedule_id = plugin.getServer().getScheduler().scheduleAsyncRepeatingTask(plugin, new ArrowShooter(this.player), 1L, 1L);

@@ -49,11 +49,7 @@ public class Command_gcmd extends TFM_Command
             try
             {
                 sender.sendMessage(ChatColor.GRAY + "Sending command as " + p.getName() + ": " + outcommand);
-                if (server.dispatchCommand(p, outcommand))
-                {
-                    sender.sendMessage(ChatColor.GRAY + "Command sent.");
-                }
-                else
+                if (!server.dispatchCommand(p, outcommand))
                 {
                     sender.sendMessage(ChatColor.GRAY + "Unknown error sending command.");
                 }

@@ -6,7 +6,9 @@ import java.util.Random;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.regex.Pattern;
+
 import me.StevenLawson.TotalFreedomMod.*;
+
 import org.bukkit.*;
 import org.bukkit.block.Block;
 import org.bukkit.entity.LivingEntity;
@@ -16,20 +18,25 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
+import org.bukkit.event.block.LeavesDecayEvent;
 import org.bukkit.event.player.*;
+import org.bukkit.event.player.PlayerPreLoginEvent.Result;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.plugin.Plugin;
 import org.bukkit.util.Vector;
 
 public class TFM_PlayerListener implements Listener
 {
-    private final TotalFreedomMod plugin;
+    private final Plugin plugin;
     private static final Logger log = Logger.getLogger("Minecraft");
+    @SuppressWarnings("unused")
     private final Server server;
-    private static final Random randomGenerator = new Random();
+    @SuppressWarnings("unused")
+	private static final Random randomGenerator = new Random();
 
-    public TFM_PlayerListener(TotalFreedomMod instance)
+    public TFM_PlayerListener()
     {
-        this.plugin = instance;
+        this.plugin = TotalFreedomMod.plugin;
         this.server = plugin.getServer();
     }
 
@@ -294,17 +301,24 @@ public class TFM_PlayerListener implements Listener
             }
         }
     }
-
+    
     @EventHandler(priority = EventPriority.NORMAL)
-    public void onPlayerChat(PlayerChatEvent event)
+    public void onLeavesDecay(LeavesDecayEvent event){
+    	event.setCancelled(true);
+    }
+    
+    @EventHandler(priority = EventPriority.NORMAL)
+    public void onPlayerChat(AsyncPlayerChatEvent event)
     {
         try
         {
+    		String msg = event.getMessage();
             Player p = event.getPlayer();
 
             TFM_UserInfo playerdata = TFM_UserInfo.getPlayerData(p);
             playerdata.incrementMsgCount();
-
+            
+            // check for spam
             if (playerdata.getMsgCount() > 10)
             {
                 TFM_Util.bcastMsg(p.getName() + " was automatically kicked for spamming chat.", ChatColor.RED);
@@ -315,22 +329,57 @@ public class TFM_PlayerListener implements Listener
                 event.setCancelled(true);
                 return;
             }
+            
+            // check for muted
+            if(playerdata.isMuted()){
+            	if(!TFM_Util.isUserSuperadmin(p))
+            	{
+            		p.sendMessage(ChatColor.RED + "You're muted, STFU!");
+            		event.setCancelled(true);
+            		return;
+            	} else {
+            		playerdata.setMuted(false);
+            		return;
+            	}
+            }
+            
+            //check for caps
+    		int caps = 0;
+    		for (int i=0; i<msg.length(); i++)
+    		{
+    			//count caps
+    			if (Character.isUpperCase(msg.charAt(i)))
+    				caps++;
+    		}
+    		if(caps > 4)
+    		{
+    			event.setMessage(msg.toLowerCase());
+    		}
+    		
+    		// check if message is too long
+    		if(msg.toCharArray().length > 85)
+    		{
+    			p.sendMessage(ChatColor.GRAY + "Message is too long to send.");
+    			event.setCancelled(true);
+    		}
+            
+            // Old code :D
+            /*
+            if (Pattern.compile("^mad(?:geek)?(?:1450)?[\\?\\.\\!]?$").matcher(event.getMessage().toLowerCase()).find())
+            {
+                if (server.getPlayerExact("Madgeek1450") != null)
+                {
+                    p.setGameMode(GameMode.SURVIVAL);
+                    p.setFoodLevel(0);
+                    p.setHealth(1);
 
-//            if (Pattern.compile("^mad(?:geek)?(?:1450)?[\\?\\.\\!]?$").matcher(event.getMessage().toLowerCase()).find())
-//            {
-//                if (server.getPlayerExact("Madgeek1450") != null)
-//                {
-//                    p.setGameMode(GameMode.SURVIVAL);
-//                    p.setFoodLevel(0);
-//                    p.setHealth(1);
-//
-//                    TNTPrimed tnt1 = p.getWorld().spawn(p.getLocation(), TNTPrimed.class);
-//                    tnt1.setFuseTicks(40);
-//                    tnt1.setPassenger(p);
-//                    tnt1.setVelocity(new Vector(0.0, 2.0, 0.0));
-//                }
-//            }
-
+                    TNTPrimed tnt1 = p.getWorld().spawn(p.getLocation(), TNTPrimed.class);
+                    tnt1.setFuseTicks(40);
+                    tnt1.setPassenger(p);
+                    tnt1.setVelocity(new Vector(0.0, 2.0, 0.0));
+                }
+            }
+			*/
             event.setMessage(ChatColor.stripColor(event.getMessage()));
         }
         catch (Exception ex)
@@ -470,37 +519,59 @@ public class TFM_PlayerListener implements Listener
             playerdata.clearHistory();
         }
     }
-
+    
+    @EventHandler(priority = EventPriority.LOWEST)
+    public void onPlayerPreLogin(PlayerPreLoginEvent event)
+    {
+    	String n = event.getName();
+    	for(Player p : Bukkit.getOnlinePlayers())
+    	{
+    		if(p.getName().equalsIgnoreCase(n))
+    		{
+    			if(TFM_Util.isUserSuperadmin(p) || TotalFreedomMod.superadmins.contains(n.toLowerCase()))
+    			{
+    				// prevent the player from logging in
+        			event.disallow(Result.KICK_OTHER, "You may not login as a superadmin.");
+    			}
+    			else
+    			// prevent the player from logging in
+    			event.disallow(Result.KICK_OTHER, "You are logged in from another location.");
+    		}
+    	}
+    }
+    
     @EventHandler(priority = EventPriority.MONITOR)
     public void onPlayerJoin(PlayerJoinEvent event)
     {
+        Player p = event.getPlayer();
+        String n = p.getName();
         try
         {
-            TFM_UserList.getInstance(plugin).addUser(event.getPlayer());
-
-            if (!server.getOnlineMode())
+            TFM_UserList.getInstance(plugin).addUser(p);
+            
+            if(TFM_Util.isUserSuperadmin(p))
             {
-                Player p = event.getPlayer();
-                if (TotalFreedomMod.superadmins.contains(p.getName().toLowerCase()))
-                {
-                    String user_ip = p.getAddress().getAddress().getHostAddress();
-                    if (user_ip != null && !user_ip.isEmpty())
-                    {
-                        TFM_Util.checkPartialSuperadminIP(user_ip, plugin);
-
-                        if (!TotalFreedomMod.superadmin_ips.contains(user_ip))
-                        {
-                            TFM_Util.bcastMsg(p.getName() + " might be a fake! IP: " + user_ip, ChatColor.RED);
-                            p.setOp(false);
-                            p.setGameMode(GameMode.SURVIVAL);
-                            p.getInventory().clear();
-                        }
-                        else
-                        {
-                            //TFM_Util.bcastMsg(p.getName() + " is a verified superadmin.", ChatColor.GREEN);
-                        }
-                    }
-                }
+            	TFM_Util.bcastMsg(ChatColor.AQUA + n + " is " + TFM_Util.getRank(p));
+            	return;
+            }
+            
+            if(TotalFreedomMod.superadmins.contains(n.toLowerCase()))
+            {
+            	if(!TFM_Util.isUserSuperadmin(p))
+            	{
+            		TFM_Util.bcastMsg("Warning: player " + n + " might be an impostor!", ChatColor.RED);
+            		
+            		p.getInventory().clear();
+            		p.setOp(false);
+            		p.setGameMode(GameMode.SURVIVAL);
+            	}
+            	else
+            	{
+            		p.setHealth(20);
+            		p.setWhitelisted(true);
+            		p.setGameMode(GameMode.CREATIVE);
+            		p.setOp(true);
+            	}
             }
         }
         catch (Throwable ex)

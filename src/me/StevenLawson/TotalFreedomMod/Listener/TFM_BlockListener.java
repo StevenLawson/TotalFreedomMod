@@ -14,16 +14,18 @@ import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.*;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.plugin.Plugin;
 
 public class TFM_BlockListener implements Listener
 {
-    private final TotalFreedomMod plugin;
-    private final Server server;
+    private final Plugin plugin;
+    @SuppressWarnings("unused")
+	private final Server server;
     private static final Logger log = Logger.getLogger("Minecraft");
 
-    public TFM_BlockListener(TotalFreedomMod instance)
+    public TFM_BlockListener()
     {
-        this.plugin = instance;
+        this.plugin = TotalFreedomMod.plugin;
         this.server = plugin.getServer();
     }
 

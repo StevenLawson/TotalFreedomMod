@@ -7,15 +7,17 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.*;
+import org.bukkit.plugin.Plugin;
 
 public class TFM_EntityListener implements Listener
 {
-    private final TotalFreedomMod plugin;
-    private final Server server;
+    private final Plugin plugin;
+    @SuppressWarnings("unused")
+	private final Server server;
 
-    public TFM_EntityListener(TotalFreedomMod instance)
+    public TFM_EntityListener()
     {
-        this.plugin = instance;
+        this.plugin = TotalFreedomMod.plugin;
         this.server = plugin.getServer();
     }
 

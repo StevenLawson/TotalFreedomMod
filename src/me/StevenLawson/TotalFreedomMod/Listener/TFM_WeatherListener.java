@@ -7,15 +7,17 @@ import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.weather.ThunderChangeEvent;
 import org.bukkit.event.weather.WeatherChangeEvent;
+import org.bukkit.plugin.Plugin;
 
 public class TFM_WeatherListener implements Listener
 {
-    private final TotalFreedomMod plugin;
-    private final Server server;
+    private final Plugin plugin;
+    @SuppressWarnings("unused")
+	private final Server server;
 
-    public TFM_WeatherListener(TotalFreedomMod instance)
+    public TFM_WeatherListener()
     {
-        this.plugin = instance;
+        this.plugin = TotalFreedomMod.plugin;
         this.server = plugin.getServer();
     }
     

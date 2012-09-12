@@ -82,6 +82,15 @@ public class TFM_Util
             p.sendMessage(message);
         }
     }
+    
+    public static void playerMsg(CommandSender sender, String message)
+    {
+    	sender.sendMessage(ChatColor.GRAY + message);
+    }
+    public static void playerMsg(CommandSender sender, String message, ChatColor color)
+    {
+    	sender.sendMessage(color + message);
+    }
 
     public static String implodeStringList(String glue, List<String> pieces)
     {
@@ -104,6 +113,18 @@ public class TFM_Util
                 Math.round(in_loc.getX()),
                 Math.round(in_loc.getY()),
                 Math.round(in_loc.getZ()));
+    }
+    
+    public static void adminAction(String adminName, String action, boolean isRed)
+    {
+    	if(isRed)
+    	{
+    		bcastMsg(adminName + " - " + action, ChatColor.RED);
+    	}
+    	else
+    	{
+    		bcastMsg(adminName + " - " + action, ChatColor.AQUA);
+    	}
     }
 
     public static void gotoWorld(CommandSender sender, String targetworld)
@@ -180,7 +201,7 @@ public class TFM_Util
         File actual = new File(tfm.getDataFolder(), name);
         if (!actual.exists())
         {
-            log.info("[" + tfm.getDescription().getName() + "]: Installing default configuration file template: " + actual.getPath());
+            TotalFreedomMod.log("Installing default configuration file template: " + actual.getPath());
             InputStream input = null;
             try
             {
@@ -188,14 +209,15 @@ public class TFM_Util
                 ZipEntry copy = file.getEntry(name);
                 if (copy == null)
                 {
-                    log.severe("[" + tfm.getDescription().getName() + "]: Unable to read default configuration: " + actual.getPath());
+                    TotalFreedomMod.log("Unable to read default configuration: " + actual.getPath(), Level.SEVERE);
                     return;
                 }
                 input = file.getInputStream(copy);
             }
             catch (IOException ioex)
             {
-                log.severe("[" + tfm.getDescription().getName() + "]: Unable to read default configuration: " + actual.getPath());
+                TotalFreedomMod.log("Unable to read default configuration: " + actual.getPath(), Level.SEVERE);
+                ioex.printStackTrace();
             }
             if (input != null)
             {
@@ -212,11 +234,12 @@ public class TFM_Util
                         output.write(buf, 0, length);
                     }
 
-                    log.info("[" + tfm.getDescription().getName() + "]: Default configuration file written: " + actual.getPath());
+                    TotalFreedomMod.log("Default configuration file written: " + actual.getPath());
                 }
                 catch (IOException ioex)
                 {
-                    log.log(Level.SEVERE, "[" + tfm.getDescription().getName() + "]: Unable to write default configuration: " + actual.getPath(), ioex);
+                    TotalFreedomMod.log("Unable to write default configuration: " + actual.getPath() + ioex.getMessage(), Level.SEVERE);
+                    ioex.printStackTrace();
                 }
                 finally
                 {
@@ -244,12 +267,6 @@ public class TFM_Util
                 }
             }
         }
-    }
-
-    @Deprecated
-    public static boolean isUserSuperadmin(CommandSender user, TotalFreedomMod tfm)
-    {
-        return isUserSuperadmin(user);
     }
 
     public static boolean isUserSuperadmin(CommandSender user)
@@ -288,13 +305,13 @@ public class TFM_Util
         }
         catch (Exception ex)
         {
-            log.severe("Exception in TFM_Util.isUserSuperadmin: " + ex.getMessage());
+            TotalFreedomMod.log("Exception in TFM_Util.isUserSuperadmin: " + ex.getMessage(), Level.SEVERE);
         }
 
         return false;
     }
 
-    public static boolean checkPartialSuperadminIP(String user_ip, TotalFreedomMod tfm)
+    public static boolean checkPartialSuperadminIP(String user_ip)
     {
         user_ip = user_ip.trim();
 
@@ -328,7 +345,7 @@ public class TFM_Util
             {
                 TotalFreedomMod.superadmin_ips.add(user_ip);
 
-                FileConfiguration config = YamlConfiguration.loadConfiguration(new File(tfm.getDataFolder(), TotalFreedomMod.SUPERADMIN_FILE));
+                FileConfiguration config = YamlConfiguration.loadConfiguration(new File(TotalFreedomMod.plugin.getDataFolder(), TotalFreedomMod.SUPERADMIN_FILE));
 
                 fileloop:
                 for (String user : config.getKeys(false))
@@ -349,7 +366,7 @@ public class TFM_Util
 
                 try
                 {
-                    config.save(new File(tfm.getDataFolder(), TotalFreedomMod.SUPERADMIN_FILE));
+                    config.save(new File(TotalFreedomMod.plugin.getDataFolder(), TotalFreedomMod.SUPERADMIN_FILE));
                 }
                 catch (IOException ex)
                 {
@@ -613,7 +630,8 @@ public class TFM_Util
             }
         }
     }
-
+    
+    @Deprecated
     public static void generateFlatlands()
     {
         generateFlatlands(TotalFreedomMod.flatlandsGenerationParams);
@@ -628,6 +646,43 @@ public class TFM_Util
         flatlands.generator(new CleanroomChunkGenerator(genParams));
         Bukkit.getServer().createWorld(flatlands);
     }
+	
+	public static String getRank(CommandSender sender)
+	{
+		if(TotalFreedomMod.superadmins.contains(sender.getName().toLowerCase()))
+		{
+			TotalFreedomMod.log(sender.getName() + " found in the Superadmin list");
+			if(!TFM_Util.isUserSuperadmin(sender))
+			{
+				return "an " + ChatColor.YELLOW + ChatColor.UNDERLINE + "Impostor" + ChatColor.RESET + ChatColor.AQUA + "!";
+			}
+		}
+		
+		if(sender.getName().equalsIgnoreCase("markbyron"))
+		{
+			return "the " + ChatColor.LIGHT_PURPLE + "Owner" + ChatColor.AQUA + ".";
+		}
+		
+		if(sender.getName().equalsIgnoreCase("madgeek1450"))
+		{
+			return "the " + ChatColor.DARK_PURPLE + "Chief-Developer" + ChatColor.AQUA + ".";
+		}
+		if(sender.getName().equalsIgnoreCase("darthsalamon"))
+		{
+			return "a " + ChatColor.DARK_PURPLE + "Developer" + ChatColor.AQUA + "!";
+		}
+	
+		if(TFM_Util.isUserSuperadmin(sender)){
+			return "an " + ChatColor.RED + "Admin" + ChatColor.AQUA + ".";
+		}
+	
+		if(sender.isOp()){
+			return "an " + ChatColor.DARK_GREEN + "OP" + ChatColor.AQUA + ".";
+		}
+	
+		return "a " + ChatColor.GREEN + "non-OP" + ChatColor.AQUA + ".";
+    }
+    
 // I wrote all this before i discovered getTargetBlock >.> - might come in handy some day...
 //    public static final double LOOKAT_VIEW_HEIGHT = 1.65;
 //    public static final double LOOKAT_STEP_DISTANCE = 0.2;
