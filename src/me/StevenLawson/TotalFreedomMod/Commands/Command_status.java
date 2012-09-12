@@ -13,6 +13,7 @@ public class Command_status extends TFM_Command
     public boolean run(CommandSender sender, Player sender_p, Command cmd, String commandLabel, String[] args, boolean senderIsConsole)
     {
         sender.sendMessage(ChatColor.GOLD + "Madgeek1450's Total Freedom Mod v" + TotalFreedomMod.pluginVersion + "." + TotalFreedomMod.buildNumber + ", built " + TotalFreedomMod.buildDate);
+        sender.sendMessage(ChatColor.GOLD + "Modified by: DarthSalamon v" + TotalFreedomMod.mod);
         sender.sendMessage(ChatColor.YELLOW + "Server is currently running with 'online-mode=" + (server.getOnlineMode() ? "true" : "false") + "'.");
         sender.sendMessage(ChatColor.GOLD + "Loaded worlds:");
 

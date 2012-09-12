@@ -34,7 +34,7 @@ public class Command_terminal extends TFM_Command
         }
 
         sender.sendMessage("Running system command: " + command);
-        server.getScheduler().scheduleAsyncDelayedTask(plugin, new TFM_RunSystemCommand(command, plugin));
+        server.getScheduler().scheduleAsyncDelayedTask(plugin, new TFM_RunSystemCommand(command));
 
         return true;
     }

@@ -18,13 +18,26 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
+import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
 
 public class TotalFreedomMod extends JavaPlugin
 {
-    private static final Logger log = Logger.getLogger("Minecraft");
-    private final Server server = Bukkit.getServer();
+	// logger
+    public static Logger logger = Bukkit.getLogger();
+    // server
+    public static Server server = Bukkit.getServer();
+    // plugin
+    public static Plugin plugin;
+    
+    public static String pluginVersion;
+    public static String buildNumber;
+    public static String buildDate;
+    public static String pluginName;
+    public static String pluginAuthor;
+    
+    public static String mod = "0.6 SE";
     
     public static final long HEARTBEAT_RATE = 5L; //Seconds
     public static final String CONFIG_FILE = "config.yml";
@@ -43,8 +56,8 @@ public class TotalFreedomMod extends JavaPlugin
     @Override
     public void onEnable()
     {
-        setAppProperties();
-
+        setAppProperties(this);
+        
         loadMainConfig();
         loadSuperadminConfig();
 
@@ -54,8 +67,8 @@ public class TotalFreedomMod extends JavaPlugin
 
         server.getScheduler().scheduleAsyncRepeatingTask(this, new TFM_Heartbeat(this), HEARTBEAT_RATE * 20L, HEARTBEAT_RATE * 20L);
 
-        log.log(Level.INFO, "[" + getDescription().getName() + "] - Enabled! - Version: " + TotalFreedomMod.pluginVersion + "." + TotalFreedomMod.buildNumber + " by Madgeek1450");
-
+        log("Enabled! - v" + pluginVersion + "." + buildNumber + " by Madgeek1450");
+        log("Modified by DarthSalamon - v" + mod);
         TFM_Util.deleteFolder(new File("./_deleteme"));
 
         if (generateFlatlands)
@@ -67,8 +80,8 @@ public class TotalFreedomMod extends JavaPlugin
     @Override
     public void onDisable()
     {
-        server.getScheduler().cancelTasks(this);
-        log.log(Level.INFO, "[" + getDescription().getName() + "] - Disabled.");
+        server.getScheduler().cancelTasks(plugin);
+        log(pluginName + " is disabled");
     }
 
     @Override
@@ -81,7 +94,7 @@ public class TotalFreedomMod extends JavaPlugin
             if (sender instanceof Player)
             {
                 sender_p = (Player) sender;
-                log.info(String.format("[PLAYER_COMMAND] %s(%s): /%s %s",
+                logger.info(String.format("[PLAYER_COMMAND] %s(%s): /%s %s",
                         sender_p.getName(),
                         ChatColor.stripColor(sender_p.getDisplayName()),
                         commandLabel,
@@ -90,7 +103,7 @@ public class TotalFreedomMod extends JavaPlugin
             else
             {
                 senderIsConsole = true;
-                log.info(String.format("[CONSOLE_COMMAND] %s: /%s %s",
+                logger.info(String.format("[CONSOLE_COMMAND] %s: /%s %s",
                         sender.getName(),
                         commandLabel,
                         TFM_Util.implodeStringList(" ", Arrays.asList(args))));
@@ -105,7 +118,7 @@ public class TotalFreedomMod extends JavaPlugin
             }
             catch (Throwable ex)
             {
-                log.log(Level.SEVERE, "[" + getDescription().getName() + "] Command not loaded: " + cmd.getName(), ex);
+                log("[" + getDescription().getName() + "] Command not loaded: " + cmd.getName() + ": " + ex.getMessage(), Level.SEVERE);
                 sender.sendMessage(ChatColor.RED + "Command Error: Command not loaded: " + cmd.getName());
                 return true;
             }
@@ -123,7 +136,7 @@ public class TotalFreedomMod extends JavaPlugin
         }
         catch (Throwable ex)
         {
-            log.log(Level.SEVERE, "[" + getDescription().getName() + "] Command Error: " + commandLabel, ex);
+            log("Command Error: " + commandLabel + ex.getMessage());
             sender.sendMessage(ChatColor.RED + "Unknown Command Error.");
         }
 
@@ -220,44 +233,48 @@ public class TotalFreedomMod extends JavaPlugin
             }
         }
     }
-    
-    private final TFM_EntityListener entityListener = new TFM_EntityListener(this);
-    private final TFM_BlockListener blockListener = new TFM_BlockListener(this);
-    private final TFM_PlayerListener playerListener = new TFM_PlayerListener(this);
-    private final TFM_WeatherListener weatherListener = new TFM_WeatherListener(this);
 
     private void registerEventHandlers()
     {
         PluginManager pm = server.getPluginManager();
 
-        pm.registerEvents(entityListener, this);
-        pm.registerEvents(blockListener, this);
-        pm.registerEvents(playerListener, this);
-        pm.registerEvents(weatherListener, this);
+        pm.registerEvents(new TFM_EntityListener(), this);
+        pm.registerEvents(new TFM_BlockListener(), this);
+        pm.registerEvents(new TFM_PlayerListener(), this);
+        pm.registerEvents(new TFM_WeatherListener(), this);
     }
 
-    public static String pluginVersion = "";
-    public static String buildNumber = "";
-    public static String buildDate = "";
-
-    private void setAppProperties()
+    private void setAppProperties(Plugin TFM_Plugin)
     {
         try
         {
+
+        	
             InputStream in;
             Properties props = new Properties();
 
             in = getClass().getResourceAsStream("/appinfo.properties");
             props.load(in);
             in.close();
-
-            TotalFreedomMod.pluginVersion = props.getProperty("program.VERSION");
-            TotalFreedomMod.buildNumber = props.getProperty("program.BUILDNUM");
-            TotalFreedomMod.buildDate = props.getProperty("program.BUILDDATE");
+            
+            plugin = TFM_Plugin;
+            pluginName = this.getDescription().getName();
+            pluginAuthor = this.getDescription().getAuthors().get(0);
+            pluginVersion = this.getDescription().getVersion();
+            buildNumber = props.getProperty("program.BUILDNUM");
+            buildDate = props.getProperty("program.BUILDDATE");
         }
         catch (Exception ex)
         {
-            log.log(Level.SEVERE, null, ex);
+            logger.log(Level.SEVERE, null, ex);
         }
+    }
+    public static void log(String message)
+    {
+    	logger.info("[" + pluginName + "] " + message);
+    }
+    public static void log(String message, Level level)
+    {
+    	logger.log(level, "[" + pluginName + "] " + message);
     }
 }

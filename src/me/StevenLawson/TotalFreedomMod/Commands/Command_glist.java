@@ -6,7 +6,10 @@ import me.StevenLawson.TotalFreedomMod.TFM_UserList;
 import me.StevenLawson.TotalFreedomMod.TFM_UserList.TFM_UserListEntry;
 import me.StevenLawson.TotalFreedomMod.TFM_Util;
 import me.StevenLawson.TotalFreedomMod.TotalFreedomMod;
+
+import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
+import org.bukkit.OfflinePlayer;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
@@ -23,12 +26,32 @@ public class Command_glist extends TFM_Command
 
         if (senderIsConsole || TFM_Util.isUserSuperadmin(sender))
         {
+        	
+        	String username;
+            List<String> ip_addresses = new ArrayList<String>();
+            
+            
+        	
             if (args.length == 1)
             {
                 if (args[0].equalsIgnoreCase("purge"))
                 {
-                    TFM_UserList.getInstance(plugin).purge();
-                    return true;
+                	int pUnbans = 0;
+                	int iUnbans = 0;
+                	TFM_Util.adminAction(sender.getName(), "Purging player ban list", true);
+                    for(OfflinePlayer p : Bukkit.getBannedPlayers())
+                    {
+                    	p.setBanned(false);
+                    	pUnbans++;
+                    }
+                    TFM_Util.adminAction(sender.getName(), "Purging IP ban list", true);
+                    for(String ip : Bukkit.getIPBans())
+                    {
+                    	Bukkit.unbanIP(ip);
+                    	iUnbans++;
+                    }
+                    sender.sendMessage(ChatColor.GRAY + "Unbanned " + pUnbans + "players.");
+                    sender.sendMessage(ChatColor.GRAY + "Unbanned " + iUnbans + "IPs.");
                 }
                 else
                 {
@@ -40,8 +63,6 @@ public class Command_glist extends TFM_Command
                 return false;
             }
 
-            String username;
-            List<String> ip_addresses = new ArrayList<String>();
 
             try
             {
@@ -67,7 +88,7 @@ public class Command_glist extends TFM_Command
             String mode = args[0].toLowerCase();
             if (mode.equalsIgnoreCase("ban"))
             {
-                TFM_Util.bcastMsg(sender.getName() + " - Banning " + username + " and IPs: " + TFM_Util.implodeStringList(",", ip_addresses), ChatColor.RED);
+            	TFM_Util.adminAction(sender.getName(), "Banning " + username + " and IPs: " + TFM_Util.implodeStringList(",", ip_addresses), true);
 
                 Player p = server.getPlayerExact(username);
                 if (p != null)
@@ -89,7 +110,7 @@ public class Command_glist extends TFM_Command
             }
             else if (mode.equalsIgnoreCase("unban"))
             {
-                TFM_Util.bcastMsg(sender.getName() + " - Unbanning " + username + " and IPs: " + TFM_Util.implodeStringList(",", ip_addresses), ChatColor.RED);
+            	TFM_Util.adminAction(sender.getName(), "Unbanning " + username + " and IPs: " + TFM_Util.implodeStringList(",", ip_addresses), true);
 
                 server.getOfflinePlayer(username).setBanned(false);
 

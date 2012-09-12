@@ -6,19 +6,21 @@ import java.io.InputStreamReader;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import org.bukkit.Server;
+import org.bukkit.plugin.Plugin;
 
 public class TFM_RunSystemCommand implements Runnable
 {
     private static final Logger log = Logger.getLogger("Minecraft");
     private final String command;
-    private final TotalFreedomMod plugin;
-    private final Server server;
+    private final Plugin plugin;
+    @SuppressWarnings("unused")
+	private final Server server;
 
-    public TFM_RunSystemCommand(String command, TotalFreedomMod plugin)
+    public TFM_RunSystemCommand(String command)
     {
         this.command = command;
-        this.plugin = plugin;
-        this.server = plugin.getServer();
+        this.plugin = TotalFreedomMod.plugin;
+        this.server = TotalFreedomMod.server;
     }
 
     @Override

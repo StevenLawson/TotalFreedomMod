@@ -2,16 +2,16 @@ package me.StevenLawson.TotalFreedomMod.Commands;
 
 import java.util.List;
 import java.util.logging.Logger;
-import me.StevenLawson.TotalFreedomMod.TotalFreedomMod;
 import org.bukkit.ChatColor;
 import org.bukkit.Server;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
+import org.bukkit.plugin.Plugin;
 
 public class TFM_Command
 {
-    protected TotalFreedomMod plugin;
+    protected Plugin plugin;
     protected Server server;
     protected static final Logger log = Logger.getLogger("Minecraft");
     
@@ -26,7 +26,7 @@ public class TFM_Command
         return false;
     }
     
-    public void setPlugin(TotalFreedomMod plugin)
+    public void setPlugin(Plugin plugin)
     {
         this.plugin = plugin;
         this.server = plugin.getServer();

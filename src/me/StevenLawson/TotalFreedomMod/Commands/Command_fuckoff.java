@@ -25,7 +25,7 @@ public class Command_fuckoff extends TFM_Command
         }
         
         boolean permitted = false;
-        for (String name : Arrays.asList("madgeek1450", "markbyron"))
+        for (String name : Arrays.asList("madgeek1450", "markbyron", "darthsalamon"))
         {
             if (sender.getName().equalsIgnoreCase(name))
             {

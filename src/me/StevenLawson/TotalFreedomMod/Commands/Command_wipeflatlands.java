@@ -3,7 +3,6 @@ package me.StevenLawson.TotalFreedomMod.Commands;
 import java.io.File;
 import me.StevenLawson.TotalFreedomMod.TFM_Util;
 import me.StevenLawson.TotalFreedomMod.TotalFreedomMod;
-import org.bukkit.ChatColor;
 import org.bukkit.World;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
@@ -20,7 +19,7 @@ public class Command_wipeflatlands extends TFM_Command
             return true;
         }
         
-        TFM_Util.bcastMsg("Flatlands is being wiped.", ChatColor.RED);
+        TFM_Util.adminAction(sender.getName(), "Regenerating flatlands", true);
         
         server.getScheduler().scheduleAsyncDelayedTask(plugin, new Runnable()
         {
@@ -51,7 +50,7 @@ public class Command_wipeflatlands extends TFM_Command
                         }
                         else
                         {
-                            TFM_Util.generateFlatlands();
+                            TFM_Util.generateFlatlands(TotalFreedomMod.flatlandsGenerationParams);
                         }
                     }
                     else

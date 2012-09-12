@@ -11,6 +11,7 @@ import java.util.logging.Logger;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
+import org.bukkit.plugin.Plugin;
 
 public class TFM_UserList
 {
@@ -21,9 +22,9 @@ public class TFM_UserList
     private static TFM_UserList instance = null;
 
     private Map<String, TFM_UserListEntry> _userlist = new HashMap<String, TFM_UserListEntry>();
-    private final TotalFreedomMod _plugin;
+    private final Plugin _plugin;
 
-    protected TFM_UserList(TotalFreedomMod plugin)
+    protected TFM_UserList(Plugin plugin)
     {
         _plugin = plugin;
 
@@ -69,7 +70,7 @@ public class TFM_UserList
         }
     }
 
-    public static TFM_UserList getInstance(TotalFreedomMod plugin)
+    public static TFM_UserList getInstance(Plugin plugin)
     {
         if (instance == null)
         {

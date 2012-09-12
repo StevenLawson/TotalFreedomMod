@@ -43,16 +43,16 @@ public class Command_gtfo extends TFM_Command
                 server.dispatchCommand(sender, String.format("/undo %d %s", 15, p.getName()));
             }
             
-            //Deop
+            // deop
             p.setOp(false);
 
-            //Set gamemode to survival:
+            // set gamemode to survival
             p.setGameMode(GameMode.SURVIVAL);
 
-            //Clear inventory:
+            // clear inventory
             p.getInventory().clear();
 
-            //Strike with lightning effect:
+            // strike with lightning effect
             final Location target_pos = p.getLocation();
             for (int x = -1; x <= 1; x++)
             {
@@ -63,7 +63,7 @@ public class Command_gtfo extends TFM_Command
                 }
             }
 
-            //Ban IP Address:
+            // ban IP Address
             String user_ip = p.getAddress().getAddress().getHostAddress();
             String[] ip_parts = user_ip.split("\\.");
             if (ip_parts.length == 4)
@@ -73,10 +73,10 @@ public class Command_gtfo extends TFM_Command
             TFM_Util.bcastMsg(String.format("Banning: %s, IP: %s.", p.getName(), user_ip), ChatColor.RED);
             server.banIP(user_ip);
 
-            //Ban Username:
+            // ban username
             server.getOfflinePlayer(p.getName()).setBanned(true);
 
-            //Kick Player:
+            // kick player
             p.kickPlayer("GTFO");
         }
         else

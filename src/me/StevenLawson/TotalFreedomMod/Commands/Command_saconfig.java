@@ -26,6 +26,10 @@ public class Command_saconfig extends TFM_Command
                 sender.sendMessage(ChatColor.GOLD + "Superadmins: " + TFM_Util.implodeStringList(", ", TotalFreedomMod.superadmins));
                 return true;
             }
+            else
+            {
+            	return false;
+            }
         }
         
         if (!senderIsConsole || sender.getName().equalsIgnoreCase("remotebukkit"))
@@ -75,6 +79,10 @@ public class Command_saconfig extends TFM_Command
             {
                 sender.sendMessage("That superadmin/superadmin ip pair already exists. Nothing to change!");
             }
+            else
+            {
+            	TFM_Util.bcastMsg(sender.getName() + " - Adding " + user_name + " to the SuperAdmin list", ChatColor.RED);
+            }
             
             FileConfiguration config = YamlConfiguration.loadConfiguration(new File(plugin.getDataFolder(), TotalFreedomMod.SUPERADMIN_FILE));
             
@@ -100,7 +108,7 @@ public class Command_saconfig extends TFM_Command
                 log.log(Level.SEVERE, null, ex);
             }
         }
-        else if (args[0].equalsIgnoreCase("delete") || args[0].equalsIgnoreCase("del"))
+        else if (args[0].equalsIgnoreCase("delete") || args[0].equalsIgnoreCase("del") || args[0].equalsIgnoreCase("remove"))
         {
             FileConfiguration config = YamlConfiguration.loadConfiguration(new File(plugin.getDataFolder(), TotalFreedomMod.SUPERADMIN_FILE));
             
@@ -129,6 +137,7 @@ public class Command_saconfig extends TFM_Command
             }
 
             sender.sendMessage("Removing superadmin: " + user_name);
+            TFM_Util.bcastMsg(sender.getName() + " - Removing " + user_name + " from the SuperAdmin list", ChatColor.RED);
             TotalFreedomMod.superadmins.remove(user_name);
             
             if (config.contains(user_name))
@@ -151,6 +160,10 @@ public class Command_saconfig extends TFM_Command
             {
                 log.log(Level.SEVERE, null, ex);
             }
+        }
+        else
+        {
+        	return false;
         }
         
         return true;
