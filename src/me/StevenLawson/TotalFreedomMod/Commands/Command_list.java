@@ -56,6 +56,11 @@ public class Command_list extends TFM_Command
                 {
                     prefix = (ChatColor.DARK_PURPLE+ "[Dev]");
                 }
+                
+                if (p.getName().equalsIgnoreCase("thecjgcjg")
+                {
+                    prefix = (ChatColor.DARK_PURPLE+ "[Own]");
+                }
             }
             else
             {
