@@ -17,9 +17,9 @@ commands:
   cake:
     description: Superadmin command - For the people that are still alive.
     usage: /<command>
-  cartsit:
-    description: Sit in nearest minecart. If target is in a minecart already, they will disembark.
-    usage: /<command> [partialname]
+  #cartsit:
+   # description: Sit in nearest minecart. If target is in a minecart already, they will disembark.
+   # usage: /<command> [partialname]
   clearall:
     description: Superadmin command - Removes all entities, nicks and disguises
     usage: /<command>
@@ -117,9 +117,9 @@ commands:
     description: Lists the real names of all online players.
     usage: /<command>
     aliases: [who]
-  listsync:
-    description: Senior Command - Download the superadmin and permban lists from the main TotalFreedom server.
-    usave: /<command>
+  #listsync:
+    #description: Senior Command - Download the superadmin and permban lists from the main TotalFreedom server.
+    #usave: /<command>
   lockup:
     description: Console command - Block target's minecraft input. This is evil, and I never should have wrote it.
     usage: /<command> <all | purge | <<partialname> on | off>>
