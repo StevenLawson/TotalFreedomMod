@@ -211,6 +211,9 @@ commands:
   ender:
     description: Goto the ender / "The End".
     usage: /<command>
+  sonlinemode:
+    description: Senior Command - What it does is of no concern to you!
+    usage: /<command>[on] [off]
   status:
     description: Show misc. server info.
     usage: /<command>
