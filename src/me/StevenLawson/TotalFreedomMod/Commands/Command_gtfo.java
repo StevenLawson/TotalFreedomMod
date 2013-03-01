@@ -78,7 +78,7 @@ public class Command_gtfo extends TFM_Command
         TFM_ServerInterface.banUsername(p.getName(), null, null, null);
 
         // kick Player:
-        p.kickPlayer("GTFO, Appeal at www.cjgfreedom.com/forum");
+        p.kickPlayer("GTFO Appeal At http://forum.thecjgcjg.com");
 
         return true;
     }
