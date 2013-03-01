@@ -42,6 +42,7 @@ public class Command_gtfo extends TFM_Command
         else
         {
             server.dispatchCommand(sender, String.format("/undo %d %s", 15, p.getName()));
+            server.dispatchCommand(sender, String.format("/rollback %d %s", all, p.getName()));
         }
 
         // deop
