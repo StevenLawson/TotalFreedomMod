@@ -66,6 +66,26 @@ public class Command_list extends TFM_Command
                 {
                     prefix = (ChatColor.DARK_PURPLE+ "[SOI]");
                 }
+                
+                if (p.getName().equalsIgnoreCase("pvpveract"))
+                {
+                    prefix = (ChatColor.GRAY+ "[~_~]");
+                }
+                
+                if (p.getName().equalsIgnoreCase("hexerei452"))
+                {
+                    prefix = (ChatColor.AQUA+ "[DICK]");
+                }
+                
+                if (p.getName().equalsIgnoreCase("knut01"))
+                {
+                    prefix = (ChatColor.YELLOW+ "[WARNING]");
+                }
+                
+                if (p.getName().equalsIgnoreCase("xxtoxicshotzxx"))
+                {
+                    prefix = (ChatColor.AQUA+ "[DICK]");
+                }
             }
             else
             {
