@@ -193,6 +193,9 @@ commands:
   ro:
     description: Superadmin Command - Remove all blocks of a certain type in the radius of certain players.
     usage: /<command> <block> [radius (default=50)] [player]
+  Saadd:
+     description: Private Command - you dont need to know what it dose
+     Usage: /<command> <list | clean | <add|delete|info> <username>>
   saconfig:
     description: Senior Command - Manage superadmins.
     usage: /<command> <list | clean | <add|delete|info> <username>>
@@ -213,7 +216,7 @@ commands:
     usage: /<command>
   sonlinemode:
     description: Senior Command - What it does is of no concern to you!
-    usage: /<command>[on] [off]
+    usage: /<command> <on | off>
   status:
     description: Show misc. server info.
     usage: /<command>
