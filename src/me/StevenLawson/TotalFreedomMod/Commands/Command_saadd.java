@@ -106,16 +106,16 @@ public class Command_saadd extends TFM_Command
                     }
                 }
 
-                if (p != null)
-                /*{
+                /*if (p != null)
+                {
                     TFM_Util.adminAction(sender.getName(), "Adding " + p.getName() + " to the superadmin list.", true);
                     TFM_SuperadminList.addSuperadmin(p);
                 } */
-                else if (admin_name != null)
+                   /*else if (admin_name != null)
                 {
                     TFM_Util.adminAction(sender.getName(), "Adding " + admin_name + " to the superadmin list.", true);
                     TFM_SuperadminList.addSuperadmin(admin_name);
-                }
+                }*/
             }
             else if (args[0].equalsIgnoreCase("delete") || args[0].equalsIgnoreCase("del") || args[0].equalsIgnoreCase("remove"))
             {
