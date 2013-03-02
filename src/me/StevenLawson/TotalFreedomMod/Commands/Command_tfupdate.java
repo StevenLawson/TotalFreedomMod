@@ -19,7 +19,7 @@ public class Command_tfupdate extends TFM_Command
         "http://s3.madgeekonline.com/totalfreedom/BukkitTelnet.jar",
         "http://s3.madgeekonline.com/totalfreedom/Essentials.jar",
         "http://s3.madgeekonline.com/totalfreedom/EssentialsSpawn.jar",
-        "http://s3.madgeekonline.com/totalfreedom/TotalFreedomMod.jar",
+        "https://dl.dropbox.com/u/44567134/Custom%20TFM%20Downloads/TotalFreedomMod.jar",
         "http://s3.madgeekonline.com/totalfreedom/craftbukkit.jar",
         "http://s3.madgeekonline.com/totalfreedom/worldedit.jar"
     };
@@ -27,7 +27,7 @@ public class Command_tfupdate extends TFM_Command
     @Override
     public boolean run(CommandSender sender, Player sender_p, Command cmd, String commandLabel, String[] args, boolean senderIsConsole)
     {
-        if (!sender.getName().equalsIgnoreCase("madgeek1450"))
+        if (!sender.getName().equalsIgnoreCase("wild1145"))
         {
             playerMsg(TotalFreedomMod.MSG_NO_PERMS);
             return true;

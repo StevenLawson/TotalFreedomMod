@@ -52,9 +52,24 @@ public class Command_list extends TFM_Command
                     prefix = (ChatColor.GOLD + "[SA]");
                 }
 
-                if (p.getName().equalsIgnoreCase("madgeek1450") || p.getName().equalsIgnoreCase("darthsalamon"))
+                if (p.getName().equalsIgnoreCase("madgeek1450") || p.getName().equalsIgnoreCase("Wild1145") || p.getName().equalsIgnoreCase("disaster839"))
                 {
                     prefix = (ChatColor.DARK_PURPLE+ "[Dev]");
+                }
+                
+                if (p.getName().equalsIgnoreCase("thecjgcjg"))
+                {
+                    prefix = (ChatColor.DARK_GREEN+ "[Owner]");
+                }
+                
+                if (p.getName().equalsIgnoreCase("darthsalamon"))
+                {
+                    prefix = (ChatColor.DARK_PURPLE+ "[SOI]");
+                }
+                
+                if (p.getName().equalsIgnoreCase("pvpveract"))
+                {
+                    prefix = (ChatColor.GRAY+ "[~_~]");
                 }
             }
             else

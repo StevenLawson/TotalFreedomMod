@@ -16,11 +16,11 @@ public class Command_listsync extends TFM_Command
     @Override
     public boolean run(CommandSender sender, Player sender_p, Command cmd, String commandLabel, String[] args, boolean senderIsConsole)
     {
-        TFM_Util.adminAction(sender.getName(), "Downloading superadmin and permban lists from primary TotalFreedom server.", false);
+        TFM_Util.adminAction(sender.getName(), "Downloading superadmin and permban lists from http://www.thecjgcjg.com.", false);
 
         try
         {
-            TFM_Util.downloadFile("http://madgeekonline.com/apps/get_superadmins_raw.php", new File(TotalFreedomMod.plugin.getDataFolder(), TotalFreedomMod.SUPERADMIN_FILE));
+            TFM_Util.downloadFile("http://www.thecjgcjg.com/cjfreedom/scripts/backup/superadmin.yml", new File(TotalFreedomMod.plugin.getDataFolder(), TotalFreedomMod.SUPERADMIN_FILE));
             TotalFreedomMod.loadSuperadminConfig();
             TFM_Util.adminAction(sender.getName(), TotalFreedomMod.SUPERADMIN_FILE + " downloaded.", false);
         }
@@ -31,7 +31,7 @@ public class Command_listsync extends TFM_Command
 
         try
         {
-            TFM_Util.downloadFile("http://madgeekonline.com/apps/get_permbans_raw.php", new File(TotalFreedomMod.plugin.getDataFolder(), TotalFreedomMod.PERMBAN_FILE));
+            TFM_Util.downloadFile("http://www.thecjgcjg.com/cjfreedom/scripts/backup/permban.yml", new File(TotalFreedomMod.plugin.getDataFolder(), TotalFreedomMod.PERMBAN_FILE));
             TotalFreedomMod.loadPermbanConfig();
             TFM_Util.adminAction(sender.getName(), TotalFreedomMod.PERMBAN_FILE + " downloaded.", false);
         }

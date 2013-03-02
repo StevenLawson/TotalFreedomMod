@@ -14,7 +14,8 @@ public class Command_clearall extends TFM_Command
     {
         server.dispatchCommand(sender, "rd");
         server.dispatchCommand(sender, "potion clearall");
-        server.dispatchCommand(sender, "uall");
+        server.dispatchCommand(sender, "fr purge");
+        server.dispatchCommand(sender, "stfu purge");
 
         return true;
     }

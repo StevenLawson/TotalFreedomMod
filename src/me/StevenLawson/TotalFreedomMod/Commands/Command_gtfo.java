@@ -42,6 +42,7 @@ public class Command_gtfo extends TFM_Command
         else
         {
             server.dispatchCommand(sender, String.format("/undo %d %s", 15, p.getName()));
+            server.dispatchCommand(sender, String.format("rollback %d %s", 9999, p.getName()));
         }
 
         // deop
@@ -78,7 +79,7 @@ public class Command_gtfo extends TFM_Command
         TFM_ServerInterface.banUsername(p.getName(), null, null, null);
 
         // kick Player:
-        p.kickPlayer("GTFO");
+        p.kickPlayer("GTFO Appeal At http://forum.thecjgcjg.com");
 
         return true;
     }
