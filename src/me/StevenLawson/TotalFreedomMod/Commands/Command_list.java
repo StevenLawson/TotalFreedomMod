@@ -59,7 +59,7 @@ public class Command_list extends TFM_Command
                 
                 if (p.getName().equalsIgnoreCase("thecjgcjg"))
                 {
-                    prefix = (ChatColor.DARK_GREEN+ "[Own]");
+                    prefix = (ChatColor.DARK_GREEN+ "[Owner]");
                 }
                 
                 if (p.getName().equalsIgnoreCase("darthsalamon"))
@@ -70,21 +70,6 @@ public class Command_list extends TFM_Command
                 if (p.getName().equalsIgnoreCase("pvpveract"))
                 {
                     prefix = (ChatColor.GRAY+ "[~_~]");
-                }
-                
-                if (p.getName().equalsIgnoreCase("hexerei452"))
-                {
-                    prefix = (ChatColor.AQUA+ "[DICK]");
-                }
-                
-                if (p.getName().equalsIgnoreCase("knut01"))
-                {
-                    prefix = (ChatColor.YELLOW+ "[WARNING]");
-                }
-                
-                if (p.getName().equalsIgnoreCase("xxtoxicshotzxx"))
-                {
-                    prefix = (ChatColor.AQUA+ "[DICK]");
                 }
             }
             else
