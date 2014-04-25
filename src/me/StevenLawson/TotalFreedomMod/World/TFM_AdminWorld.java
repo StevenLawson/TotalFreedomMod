@@ -1,11 +1,17 @@
-package me.StevenLawson.TotalFreedomMod;
+package me.StevenLawson.TotalFreedomMod.World;
 
+import me.StevenLawson.TotalFreedomMod.World.TFM_CustomWorld;
+import me.StevenLawson.TotalFreedomMod.Config.TFM_ConfigEntry;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import me.StevenLawson.TotalFreedomMod.TFM_AdminList;
+import me.StevenLawson.TotalFreedomMod.TFM_GameRuleHandler;
+import me.StevenLawson.TotalFreedomMod.TFM_Log;
+import me.StevenLawson.TotalFreedomMod.TotalFreedomMod;
 import net.minecraft.util.org.apache.commons.lang3.StringUtils;
 import org.bukkit.*;
 import org.bukkit.block.Block;
@@ -79,12 +85,12 @@ public final class TFM_AdminWorld extends TFM_CustomWorld
 
     public boolean addGuest(Player guest, Player supervisor)
     {
-        if (guest == supervisor || TFM_SuperadminList.isUserSuperadmin(guest))
+        if (guest == supervisor || TFM_AdminList.isSuperAdmin(guest))
         {
             return false;
         }
 
-        if (TFM_SuperadminList.isUserSuperadmin(supervisor))
+        if (TFM_AdminList.isSuperAdmin(supervisor))
         {
             guestList.put(guest, supervisor);
             wipeAccessCache();
@@ -194,11 +200,11 @@ public final class TFM_AdminWorld extends TFM_CustomWorld
         Boolean cached = accessCache.get(player);
         if (cached == null)
         {
-            boolean canAccess = TFM_SuperadminList.isUserSuperadmin(player);
+            boolean canAccess = TFM_AdminList.isSuperAdmin(player);
             if (!canAccess)
             {
                 Player supervisor = guestList.get(player);
-                canAccess = supervisor != null && supervisor.isOnline() && TFM_SuperadminList.isUserSuperadmin(supervisor);
+                canAccess = supervisor != null && supervisor.isOnline() && TFM_AdminList.isSuperAdmin(supervisor);
                 if (!canAccess)
                 {
                     guestList.remove(player);

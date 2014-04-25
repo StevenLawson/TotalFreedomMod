@@ -1,5 +1,6 @@
 package me.StevenLawson.TotalFreedomMod.Listener;
 
+import me.StevenLawson.TotalFreedomMod.Config.TFM_ConfigEntry;
 import me.StevenLawson.TotalFreedomMod.*;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
@@ -91,7 +92,7 @@ public class TFM_BlockListener implements Listener
 
         if (TFM_ConfigEntry.PROTECTED_AREAS_ENABLED.getBoolean())
         {
-            if (!TFM_SuperadminList.isUserSuperadmin(player))
+            if (!TFM_AdminList.isSuperAdmin(player))
             {
                 if (TFM_ProtectedArea.isInProtectedArea(blockLocation))
                 {
@@ -161,7 +162,7 @@ public class TFM_BlockListener implements Listener
 
         if (TFM_ConfigEntry.PROTECTED_AREAS_ENABLED.getBoolean())
         {
-            if (!TFM_SuperadminList.isUserSuperadmin(player))
+            if (!TFM_AdminList.isSuperAdmin(player))
             {
                 if (TFM_ProtectedArea.isInProtectedArea(blockLocation))
                 {
@@ -249,7 +250,7 @@ public class TFM_BlockListener implements Listener
     @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
     public void onRollbackBlockBreak(BlockBreakEvent event)
     {
-        if (!TFM_SuperadminList.isUserSuperadmin(event.getPlayer()))
+        if (!TFM_AdminList.isSuperAdmin(event.getPlayer()))
         {
             TFM_RollbackManager.blockBreak(event);
         }
@@ -258,7 +259,7 @@ public class TFM_BlockListener implements Listener
     @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
     public void onRollbackBlockPlace(BlockPlaceEvent event)
     {
-        if (!TFM_SuperadminList.isUserSuperadmin(event.getPlayer()))
+        if (!TFM_AdminList.isSuperAdmin(event.getPlayer()))
         {
             TFM_RollbackManager.blockPlace(event);
         }

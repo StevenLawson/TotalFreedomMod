@@ -13,7 +13,7 @@ public class TFM_Jumppads
     public static final Material BLOCK_ID = Material.WOOL;
     public static final double DAMPING_COEFFICIENT = 0.8;
     public final Map<Player, Boolean> canPushMap = new HashMap<Player, Boolean>();
-    private JumpPadMode mode = JumpPadMode.OFF;
+    private JumpPadMode mode = JumpPadMode.MADGEEK;
     private double strength = 0.4;
 
     public void PlayerMoveEvent(PlayerMoveEvent event)
@@ -111,7 +111,7 @@ public class TFM_Jumppads
         OFF(false), NORMAL(true), NORMAL_AND_SIDEWAYS(true), MADGEEK(true);
         private boolean on;
 
-        JumpPadMode(boolean on)
+        private JumpPadMode(boolean on)
         {
             this.on = on;
         }

@@ -1,13 +1,13 @@
 package me.StevenLawson.TotalFreedomMod.Commands;
 
-import me.StevenLawson.TotalFreedomMod.TFM_SuperadminList;
+import me.StevenLawson.TotalFreedomMod.TFM_AdminList;
 import me.StevenLawson.TotalFreedomMod.TFM_Util;
 import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
-@CommandPermissions(level = AdminLevel.SENIOR, source = SourceType.BOTH, block_host_console = true)
+@CommandPermissions(level = AdminLevel.SENIOR, source = SourceType.BOTH, blockHostConsole = true)
 @CommandParameters(description = "Kick all non-superadmins on server.", usage = "/<command>")
 public class Command_kicknoob extends TFM_Command
 {
@@ -18,7 +18,7 @@ public class Command_kicknoob extends TFM_Command
 
         for (Player player : server.getOnlinePlayers())
         {
-            if (!TFM_SuperadminList.isUserSuperadmin(player))
+            if (!TFM_AdminList.isSuperAdmin(player))
             {
                 player.kickPlayer(ChatColor.RED + "Disconnected by admin.");
             }

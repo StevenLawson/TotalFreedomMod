@@ -23,7 +23,6 @@ public class TFM_PlayerData
     public final static Map<Player, TFM_PlayerData> userinfo = new HashMap<Player, TFM_PlayerData>();
     private final Player player;
     private final String ip;
-    private final String username;
     private boolean isFrozen = false;
     private boolean isMuted = false;
     private boolean isHalted = false;
@@ -50,16 +49,15 @@ public class TFM_PlayerData
     private String lastMessage = "";
     private boolean inAdminchat = false;
     private boolean allCommandsBlocked = false;
-    private Boolean verifiedSuperadminId = null;
+    private boolean verifiedSuperadminId = false;
     private String lastCommand = "";
     private boolean cmdspyEnabled = false;
     private String tag = null;
 
-    public TFM_PlayerData(Player player)
+    private TFM_PlayerData(Player player)
     {
         this.player = player;
         this.ip = player.getAddress().getAddress().getHostAddress();
-        this.username = player.getName();
     }
 
     public static TFM_PlayerData getPlayerData(Player player)
@@ -74,7 +72,7 @@ public class TFM_PlayerData
                 Entry<Player, TFM_PlayerData> pair = it.next();
                 TFM_PlayerData playerdataTest = pair.getValue();
 
-                if (playerdataTest.username.equalsIgnoreCase(player.getName()))
+                if (playerdataTest.player.getName().equalsIgnoreCase(player.getName()))
                 {
                     if (Bukkit.getOnlineMode())
                     {
@@ -105,11 +103,6 @@ public class TFM_PlayerData
     public String getIpAddress()
     {
         return this.ip;
-    }
-
-    public String getPlayerName()
-    {
-        return this.username;
     }
 
     public boolean isOrbiting()
@@ -192,12 +185,12 @@ public class TFM_PlayerData
         }
     }
 
-    class TFM_BlockData
+    private class TFM_BlockData
     {
         public Material material;
         public Location location;
 
-        public TFM_BlockData(Location location, Material material)
+        private TFM_BlockData(Location location, Material material)
         {
             this.location = location;
             this.material = material;
@@ -325,7 +318,7 @@ public class TFM_PlayerData
     {
         private Player player;
 
-        public ArrowShooter(Player player)
+        private ArrowShooter(Player player)
         {
             this.player = player;
         }
@@ -385,7 +378,7 @@ public class TFM_PlayerData
             player.setOp(false);
             player.setGameMode(GameMode.SURVIVAL);
             player.setFlying(false);
-            player.setDisplayName(username);
+            player.setDisplayName(player.getName());
             player.closeInventory();
             player.setTotalExperience(0);
 
@@ -449,14 +442,14 @@ public class TFM_PlayerData
 
     // If someone logs in to telnet or minecraft, and they are an admin, make sure that they are using a username that is associated with their IP.
     // After the check for this is done in TFM_PlayerListener, never change it elsewhere.
-    public Boolean isSuperadminIdVerified()
+    public boolean isSuperadminIdVerified()
     {
         return this.verifiedSuperadminId;
     }
 
     // If someone logs in to telnet or minecraft, and they are an admin, make sure that they are using a username that is associated with their IP.
     // After the check for this is done in TFM_PlayerListener, never change it elsewhere.
-    public void setSuperadminIdVerified(Boolean verifiedSuperadminId)
+    public void setSuperadminIdVerified(boolean verifiedSuperadminId)
     {
         this.verifiedSuperadminId = verifiedSuperadminId;
     }

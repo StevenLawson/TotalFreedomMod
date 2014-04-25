@@ -2,6 +2,8 @@ package me.StevenLawson.TotalFreedomMod.Commands;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import me.StevenLawson.TotalFreedomMod.TFM_Ban;
+import me.StevenLawson.TotalFreedomMod.TFM_BanManager;
 import me.StevenLawson.TotalFreedomMod.TFM_ServerInterface;
 import me.StevenLawson.TotalFreedomMod.TFM_Util;
 import net.minecraft.util.org.apache.commons.lang3.ArrayUtils;
@@ -10,6 +12,7 @@ import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
+import org.bukkit.Location;
 
 @CommandPermissions(level = AdminLevel.SUPER, source = SourceType.BOTH)
 @CommandParameters(description = "Temporarily ban someone.", usage = "/<command> [playername] [duration] [reason]")
@@ -36,30 +39,44 @@ public class Command_tempban extends TFM_Command
             return true;
         }
 
-        StringBuilder bcast_msg = new StringBuilder("Temporarily banned " + player.getName());
+        final StringBuilder message = new StringBuilder("Temporarily banned " + player.getName());
 
-        Date ban_duration = TFM_Util.parseDateOffset("30m");
+        Date expires = TFM_Util.parseDateOffset("30m");
         if (args.length >= 2)
         {
             Date parsed_offset = TFM_Util.parseDateOffset(args[1]);
             if (parsed_offset != null)
             {
-                ban_duration = parsed_offset;
+                expires = parsed_offset;
             }
         }
-        bcast_msg.append(" until ").append(date_format.format(ban_duration));
+        message.append(" until ").append(date_format.format(expires));
 
-        String ban_reason = "Banned by " + sender.getName();
+        String reason = "Banned by " + sender.getName();
         if (args.length >= 3)
         {
-            ban_reason = StringUtils.join(ArrayUtils.subarray(args, 2, args.length), " ") + " (" + sender.getName() + ")";
-            bcast_msg.append(", Reason: \"").append(ban_reason).append("\"");
+            reason = StringUtils.join(ArrayUtils.subarray(args, 2, args.length), " ") + " (" + sender.getName() + ")";
+            message.append(", Reason: \"").append(reason).append("\"");
         }
 
-        TFM_Util.adminAction(sender.getName(), bcast_msg.toString(), true);
-        TFM_ServerInterface.banUsername(player.getName(), ban_reason, sender.getName(), ban_duration);
-        TFM_ServerInterface.banIP(player.getAddress().getAddress().getHostAddress().trim(), ban_reason, sender.getName(), ban_duration);
-        player.kickPlayer(sender.getName() + " - " + bcast_msg.toString());
+
+        // strike with lightning effect:
+        final Location targetPos = player.getLocation();
+        for (int x = -1; x <= 1; x++)
+        {
+            for (int z = -1; z <= 1; z++)
+            {
+                final Location strike_pos = new Location(targetPos.getWorld(), targetPos.getBlockX() + x, targetPos.getBlockY(), targetPos.getBlockZ() + z);
+                targetPos.getWorld().strikeLightning(strike_pos);
+            }
+        }
+
+        TFM_Util.adminAction(sender.getName(), message.toString(), true);
+
+        TFM_BanManager.getInstance().addIpBan(new TFM_Ban(TFM_Util.getIp(player), player.getName(), sender.getName(), expires, reason));
+        TFM_BanManager.getInstance().addUuidBan(new TFM_Ban(player.getUniqueId(), player.getName(), sender.getName(), expires, reason));
+
+        player.kickPlayer(sender.getName() + " - " + message.toString());
 
         return true;
     }

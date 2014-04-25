@@ -8,7 +8,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import me.StevenLawson.TotalFreedomMod.HTTPD.NanoHTTPD.HTTPSession;
 import me.StevenLawson.TotalFreedomMod.HTTPD.NanoHTTPD.Response;
-import me.StevenLawson.TotalFreedomMod.TFM_ConfigEntry;
+import me.StevenLawson.TotalFreedomMod.Config.TFM_ConfigEntry;
 import me.StevenLawson.TotalFreedomMod.TFM_Log;
 import me.StevenLawson.TotalFreedomMod.TotalFreedomMod;
 import net.minecraft.util.org.apache.commons.lang3.StringUtils;
@@ -116,6 +116,14 @@ public class TFM_HTTPD_Manager
             public Response getResponse(HTTPSession session)
             {
                 return new Module_permbans(session).getResponse();
+            }
+        }),
+        PLAYERS(new ModuleExecutable(true, "players")
+        {
+            @Override
+            public Response getResponse(HTTPSession session)
+            {
+                return new Module_players(session).getResponse();
             }
         });
         //

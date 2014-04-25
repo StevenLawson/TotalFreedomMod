@@ -1,5 +1,6 @@
 package me.StevenLawson.TotalFreedomMod.Commands;
 
+import me.StevenLawson.TotalFreedomMod.TFM_AdminList;
 import me.StevenLawson.TotalFreedomMod.TFM_Util;
 import me.StevenLawson.TotalFreedomMod.TotalFreedomMod;
 import org.bukkit.OfflinePlayer;
@@ -8,72 +9,58 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
 @CommandPermissions(level = AdminLevel.OP, source = SourceType.BOTH)
-@CommandParameters(description = "Manage operators", usage = "/<command> <count | list | purge>")
+@CommandParameters(description = "Manager operators", usage = "/<command> <count | purge>")
 public class Command_ops extends TFM_Command
 {
     @Override
     public boolean run(CommandSender sender, Player sender_p, Command cmd, String commandLabel, String[] args, boolean senderIsConsole)
     {
-        if (args.length < 1 || args.length > 1)
+        if (args.length != 1)
         {
             return false;
         }
 
-        if (args[0].equalsIgnoreCase("list"))
+        if (args[0].equals("count"))
         {
-            TFM_Util.playerMsg(sender, "Operators: " + TFM_Util.playerListToNames(server.getOperators()));
-            return true;
-        }
+            int totalOps = server.getOperators().size();
+            int onlineOps = 0;
 
-        if (args[0].equalsIgnoreCase("count"))
-        {
-            int onlineOPs = 0;
-            int offlineOPs = 0;
-            int totalOPs = 0;
-
-            for (OfflinePlayer player : server.getOperators())
+            for (Player player : server.getOnlinePlayers())
             {
-                if (player.isOnline())
+                if (player.isOp())
                 {
-                    onlineOPs++;
+                    onlineOps++;
                 }
-                else
-                {
-                    offlineOPs++;
-                }
-                totalOPs++;
             }
 
-            playerMsg("Online OPs: " + onlineOPs);
-            playerMsg("Offline OPs: " + offlineOPs);
-            playerMsg("Total OPs: " + totalOPs);
+            playerMsg("Online OPs: " + onlineOps);
+            playerMsg("Offline OPs: " + (totalOps - onlineOps));
+            playerMsg("Total OPs: " + totalOps);
 
             return true;
         }
 
-        if (args[0].equalsIgnoreCase("purge"))
+        if (args[0].equals("purge"))
         {
-            if (!senderIsConsole)
+            if (!TFM_AdminList.isSuperAdmin(sender))
             {
                 playerMsg(TotalFreedomMod.MSG_NO_PERMS);
                 return true;
             }
 
-            TFM_Util.adminAction(sender.getName(), "Removing all operators", true);
+            TFM_Util.adminAction(sender.getName(), "Purging all operators", true);
 
             for (OfflinePlayer player : server.getOperators())
             {
                 player.setOp(false);
-
                 if (player.isOnline())
                 {
-                    player.getPlayer().sendMessage(TotalFreedomMod.YOU_ARE_NOT_OP);
+                    playerMsg((Player) player, TotalFreedomMod.YOU_ARE_NOT_OP);
                 }
             }
-
             return true;
         }
 
-        return true;
+        return false;
     }
 }

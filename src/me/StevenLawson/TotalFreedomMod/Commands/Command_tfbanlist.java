@@ -2,7 +2,8 @@ package me.StevenLawson.TotalFreedomMod.Commands;
 
 import me.StevenLawson.TotalFreedomMod.TFM_Log;
 import me.StevenLawson.TotalFreedomMod.TFM_ServerInterface;
-import me.StevenLawson.TotalFreedomMod.TFM_SuperadminList;
+import me.StevenLawson.TotalFreedomMod.TFM_AdminList;
+import me.StevenLawson.TotalFreedomMod.TFM_BanManager;
 import me.StevenLawson.TotalFreedomMod.TFM_Util;
 import org.bukkit.ChatColor;
 import org.bukkit.OfflinePlayer;
@@ -21,12 +22,12 @@ public class Command_tfbanlist extends TFM_Command
         {
             if (args[0].equalsIgnoreCase("purge"))
             {
-                if (senderIsConsole || TFM_SuperadminList.isUserSuperadmin(sender))
+                if (senderIsConsole || TFM_AdminList.isSuperAdmin(sender))
                 {
                     try
                     {
                         TFM_Util.adminAction(sender.getName(), "Purging the ban list", true);
-                        TFM_ServerInterface.wipeNameBans();
+                        TFM_BanManager.getInstance().purgeUuidBans();
                         sender.sendMessage(ChatColor.GRAY + "Ban list has been purged.");
                     }
                     catch (Exception ex)
@@ -43,20 +44,7 @@ public class Command_tfbanlist extends TFM_Command
             }
         }
 
-        StringBuilder banned_players = new StringBuilder();
-        banned_players.append("Banned Players: ");
-        boolean first = true;
-        for (OfflinePlayer player : server.getBannedPlayers())
-        {
-            if (!first)
-            {
-                banned_players.append(", ");
-            }
-            first = false;
-            banned_players.append(player.getName().trim());
-        }
-
-        playerMsg(banned_players.toString());
+        playerMsg(TFM_BanManager.getInstance().getUuidBanList().size() + " UUID bans total");
 
         return true;
     }

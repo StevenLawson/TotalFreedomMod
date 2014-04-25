@@ -1,13 +1,13 @@
 package me.StevenLawson.TotalFreedomMod.Commands;
 
 import me.StevenLawson.TotalFreedomMod.TFM_RollbackManager;
-import me.StevenLawson.TotalFreedomMod.TFM_UserList;
+import me.StevenLawson.TotalFreedomMod.TFM_PlayerList;
 import me.StevenLawson.TotalFreedomMod.TFM_Util;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
-@CommandPermissions(level = AdminLevel.SUPER, source = SourceType.BOTH, block_host_console = true)
+@CommandPermissions(level = AdminLevel.SUPER, source = SourceType.BOTH, blockHostConsole = true)
 @CommandParameters(description = "Issues a rollback on a player", usage = "/<command> <[partialname] | undo [partialname] purge [partialname] | purgeall>", aliases = "rb")
 public class Command_rollback extends TFM_Command
 {
@@ -38,7 +38,7 @@ public class Command_rollback extends TFM_Command
 
                 TFM_Util.adminAction(sender.getName(), "Rolling back player: " + playerName, false);
                 playerMsg("Rolled back " + TFM_RollbackManager.rollback(playerName) + " edits for " + playerName + ".");
-                playerMsg("If this rollback was a mistake, use /rollback undo " + playerName + " within 20 seconds to reverse the rollback.");
+                playerMsg("If this rollback was a mistake, use /rollback undo " + playerName + " within 40 seconds to reverse the rollback.");
             }
         }
         else if (args.length == 2)
@@ -99,7 +99,7 @@ public class Command_rollback extends TFM_Command
 
         if (playerName == null)
         {
-            playerName = TFM_UserList.getInstance(plugin).searchByPartialName(playerNameInput);
+            playerName = TFM_PlayerList.getInstance().getEntry(playerNameInput).getLastJoinName();
         }
 
         return playerName;

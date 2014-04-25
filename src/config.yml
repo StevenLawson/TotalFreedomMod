@@ -1,4 +1,4 @@
-# TotalFreedomMod v3.3 Configuration
+# TotalFreedomMod v4.1 Configuration
 # by Madgeek1450 and DarthSalamon
 
 # Block placement prevention:
@@ -61,7 +61,7 @@ blocked_commands:
   - 'n:b:/toggledownfall:_'
   - 'n:b:/effect:Please use /potion to set effects.'
   - 'n:b:/enderchest:_'
-  
+
   # Superadmin commands
   - 's:b:/kick:_'
   - 's:b:/socialspy:_'
@@ -74,11 +74,10 @@ blocked_commands:
   - 's:b:/tool:_'
   - 's:b://butcher:_'
   - 's:b:/scoreboard:_'
-  
+
   # Superadmin commands - Auto-eject
   - 's:a:/stop'
   - 's:a:/reload'
-  - 's:a:/nuke'
   - 's:a:/save-all'
   - 's:a:/save-on'
   - 's:a:/save-off'
@@ -130,6 +129,10 @@ protected_areas_enabled: true
 auto_protect_spawnpoints: true
 auto_protect_radius: 25.0
 
+# Give the default CONSOLE senior admin privileges.
+# Handy in development environments.
+console_is_senior: true
+
 # Host Sender Names - Names that indicate automated services or host-based consoles you want to block from using some commands.
 # Make sure these are all lower-case.
 host_sender_names:
@@ -171,6 +174,9 @@ unbannable_usernames:
   - cavemanfilms
   - herobrine
   - whiteboy7thst
+  - stampylonghead
+  - stampylongnose
+  - dantdm
 
 # TwitterBot - Used to allow superadmins to verify themselves using twitter
 twitterbot_enabled: false
@@ -183,7 +189,7 @@ pet_protect_enabled: true
 # Logs Registration
 logs_register_password: ''
 logs_register_url: ''
-  
+
 # Mojang service checker
 service_checker_url: http://status.mojang.com/check
 
