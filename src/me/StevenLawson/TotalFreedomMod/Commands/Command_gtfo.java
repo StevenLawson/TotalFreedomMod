@@ -41,6 +41,11 @@ public class Command_gtfo extends TFM_Command
         {
             ban_reason = StringUtils.join(ArrayUtils.subarray(args, 1, args.length), " ");
         }
+        
+        //rollback
+        
+        server.dispatchCommand(sender, "rollback " + p.getName() + " all");
+        
 
         TFM_Util.bcastMsg(player.getName() + " has been a VERY naughty, naughty boy.", ChatColor.RED);
 
